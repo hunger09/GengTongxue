@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environment
+.geng/
+venv/
+.venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# PyInstaller
+*.spec
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Reports (generated)
+*.html
+!tests/fixtures/*.html
