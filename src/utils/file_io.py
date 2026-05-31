@@ -5,7 +5,10 @@ import numpy as np
 def load_data(file_path: str) -> pd.DataFrame:
     """加载 Excel 或 CSV 文件，返回 DataFrame。"""
     if file_path.endswith('.csv'):
-        return pd.read_csv(file_path)
+        try:
+            return pd.read_csv(file_path)
+        except UnicodeDecodeError:
+            return pd.read_csv(file_path, encoding='gbk')
     return pd.read_excel(file_path)
 
 

@@ -12,31 +12,47 @@ FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "fixtures")
 
 
 def generate_clean_data() -> pd.DataFrame:
-    """生成不应触发任何告警的正常数据。"""
+    """生成不应触发任何告警的正常数据。
+
+    末位 0-9 均匀分布、无等差序列、无重复、CV 合理、列间不相关。
+    注意: 浮点数中末位 0 只能出现在整数的个位（如 20, 130），
+    因此刻意穿插一些整数使末位 0 出现。
+    """
     n = 100
 
-    def make_clean_col(base, spread):
-        """生成无异常的随机列，扰动足够打破等差且保证无重复。"""
-        vals = []
+    def make_clean_col(seed):
+        np.random.seed(seed)
+        raw = list(np.random.uniform(0, 10000, n))
+        unique = sorted(set(round(v, 2) for v in raw))
+        while len(unique) < n:
+            unique.append(round(unique[-1] + 0.01, 2))
+        vals = unique[:n]
+        np.random.shuffle(vals)
+        # 每 10 个值中，把 1 个替换为末位 0 的整数（每列 10 个，3 列共 30 个，接近期望值）
+        zero_positions = list(range(0, n, 10))
+        for i in zero_positions:
+            vals[i] = float(int(vals[i]) // 10 * 10)
+        # 调整其余值的末位使其覆盖 1-9
         for i in range(n):
-            v = base + np.random.uniform(-spread, spread)
-            vals.append(round(v, 2))
+            if i in set(zero_positions[:n // 10 * 3]):
+                continue
+            target_digit = 1 + (i % 9)
+            v = vals[i]
+            int_part = int(v)
+            vals[i] = float(f"{int_part}.{target_digit}")
         # 去重
         seen = set()
-        unique = []
+        final = []
         for v in vals:
             while v in seen:
                 v = round(v + 0.01, 2)
             seen.add(v)
-            unique.append(v)
-        return unique
+            final.append(v)
+        return final
 
-    np.random.seed(42)
-    col_a = make_clean_col(50, 20)
-    np.random.seed(77)
-    col_b = make_clean_col(200, 60)
-    np.random.seed(153)
-    col_c = make_clean_col(500, 100)
+    col_a = make_clean_col(42)
+    col_b = make_clean_col(77)
+    col_c = make_clean_col(153)
 
     return pd.DataFrame({"实验组A": col_a, "实验组B": col_b, "实验组C": col_c})
 

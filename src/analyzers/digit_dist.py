@@ -11,9 +11,11 @@ class DigitDistributionAnalyzer(BaseAnalyzer):
     def analyze(self, values: np.ndarray) -> list[tuple]:
         last_digits = []
         for v in values:
-            s = "{:.10f}".format(v).rstrip('0').rstrip('.') if '.' in "{:.10f}".format(v) else str(int(v))
-            if s:
-                last_digits.append(int(s[-1]))
+            s = f"{abs(round(v, 10)):g}"
+            for ch in reversed(s):
+                if ch.isdigit():
+                    last_digits.append(int(ch))
+                    break
 
         if not last_digits:
             return []
@@ -22,7 +24,7 @@ class DigitDistributionAnalyzer(BaseAnalyzer):
         total = len(last_digits)
         expected = total / 10
 
-        chi_squared = sum((count - expected) ** 2 / expected for count in digit_counts.values())
+        chi_squared = sum((digit_counts.get(d, 0) - expected) ** 2 / expected for d in range(10))
         p_value = 1 - stats.chi2.cdf(chi_squared, 9)
 
         if p_value < 0.05:

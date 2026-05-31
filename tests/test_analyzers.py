@@ -25,8 +25,8 @@ class TestDigitDistribution:
 
     def test_negative(self):
         """均匀末位分布的数据不应被检出。"""
-        np.random.seed(42)
-        values = np.round(np.random.normal(50, 15, 100), 1)
+        # 构造末位 0-9 各出现 10 次
+        values = np.array([float(d) + i * 10 for i in range(10) for d in range(10)])
         results = DigitDistributionAnalyzer().analyze(values)
         assert len(results) == 0
 

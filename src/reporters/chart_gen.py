@@ -11,9 +11,11 @@ plt.rcParams['axes.unicode_minus'] = False
 def _extract_last_digits(values: np.ndarray) -> list[int]:
     last_digits = []
     for v in values:
-        s = "{:.10f}".format(v).rstrip('0').rstrip('.') if '.' in "{:.10f}".format(v) else str(int(v))
-        if s:
-            last_digits.append(int(s[-1]))
+        s = f"{abs(round(v, 10)):g}"
+        for ch in reversed(s):
+            if ch.isdigit():
+                last_digits.append(int(ch))
+                break
     return last_digits
 
 

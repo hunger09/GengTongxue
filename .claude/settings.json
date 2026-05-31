@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(.geng/Scripts/pip.exe show *)"
+      "Bash(.geng/Scripts/pip.exe show *)",
+      "Bash(PYTHONIOENCODING=utf-8 .geng/Scripts/python.exe -m pytest tests/ -v)",
+      "Bash(.geng/Scripts/python.exe tests/generate_fixtures.py)"
     ]
   }
 }
