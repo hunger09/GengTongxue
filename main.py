@@ -8,6 +8,8 @@ def on_closing(root):
     root.destroy()
 
 
+
+
 if __name__ == "__main__":
     root = tk.Tk()
     app = AcademicDataChecker(root)
