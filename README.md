@@ -40,3 +40,10 @@ python main.py
 pip install pyinstaller
 pyinstaller --onefile --windowed --name "实验数据自检工具" main.py
 ```
+---
+
+## 🙏 致谢
+
+- 灵感来源于 B 站 UP 主 [**耿同学讲故事**](https://space.bilibili.com/1732848825)
+- PubPeer 社区对论文的公开质疑
+- 知乎网友对学术不端问题的深入分析
