@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(.geng/Scripts/pip.exe show *)"
+    ]
+  }
+}
